@@ -1,0 +1,370 @@
+[
+  {
+    "id": "a",
+    "kana": {
+      "hiragana": "あ",
+      "katakana": "ア"
+    },
+    "answer": "a"
+  },
+  {
+    "id": "ta",
+    "kana": {
+      "hiragana": "た",
+      "katakana": "タ"
+    },
+    "answer": "ta"
+  },
+  {
+    "id": "ka",
+    "kana": {
+      "hiragana": "か",
+      "katakana": "カ"
+    },
+    "answer": "ka"
+  },
+  {
+    "id": "sa",
+    "kana": {
+      "hiragana": "さ",
+      "katakana": "サ"
+    },
+    "answer": "sa"
+  },
+  {
+    "id": "na",
+    "kana": {
+      "hiragana": "な",
+      "katakana": "ナ"
+    },
+    "answer": "na"
+  },
+  {
+    "id": "ha",
+    "kana": {
+      "hiragana": "は",
+      "katakana": "ハ"
+    },
+    "answer": "ha"
+  },
+  {
+    "id": "ma",
+    "kana": {
+      "hiragana": "ま",
+      "katakana": "マ"
+    },
+    "answer": "ma"
+  },
+  {
+    "id": "ya",
+    "kana": {
+      "hiragana": "や",
+      "katakana": "ヤ"
+    },
+    "answer": "ya"
+  },
+  {
+    "id": "ra",
+    "kana": {
+      "hiragana": "ら",
+      "katakana": "ラ"
+    },
+    "answer": "ra"
+  },
+  {
+    "id": "wa",
+    "kana": {
+      "hiragana": "わ",
+      "katakana": "ワ"
+    },
+    "answer": "wa"
+  },
+  {
+    "id": "i",
+    "kana":{
+      "hiragana": "い",
+      "katakana": "イ"
+    },
+    "answer": "i"
+  },
+  {
+    "id": "ki",
+    "kana": {
+      "hiragana": "き",
+      "katakana": "キ"
+    },
+    "answer": "ki"
+  },
+  {
+    "id": "shi",
+    "kana": {
+      "hiragana": "し",
+      "katakana": "シ"
+    },
+    "answer": "shi"
+  },
+  {
+    "id": "chi",
+    "kana": {
+      "hiragana": "ち",
+      "katakana": "チ"
+    },
+    "answer": "chi"
+  },
+  {
+    "id": "ni",
+    "kana": {
+      "hiragana": "に",
+      "katakana": "ニ"
+    },
+    "answer": "ni"
+  },
+  {
+    "id": "hi",
+    "kana": {
+      "hiragana": "ひ",
+      "katakana": "ヒ"
+    },
+    "answer": "hi"
+  },
+  {
+    "id": "mi",
+    "kana": {
+      "hiragana": "み",
+      "katakana": "ミ"
+    },
+    "answer": "mi"
+  },
+  {
+    "id": "ri",
+    "kana": {
+      "hiragana": "り",
+      "katakana": "リ"
+    },
+    "answer": "ri"
+  },
+  {
+    "id": "u",
+    "kana": {
+      "hiragana": "う",
+      "katakana": "ウ"
+    },
+    "answer": "u"
+  },
+  {
+    "id": "ku",
+    "kana": {
+      "hiragana": "く",
+      "katakana": "ク"
+    },
+    "answer": "ku"
+  },
+  {
+    "id": "su",
+    "kana": {
+      "hiragana": "す",
+      "katakana": "ス"
+    },
+    "answer": "su"
+  },
+  {
+    "id": "tsu",
+    "kana": {
+      "hiragana": "つ",
+      "katakana": "ツ"
+    },
+    "answer": "tsu"
+  },
+  {
+    "id": "nu",
+    "kana": {
+      "hiragana": "ぬ",
+      "katakana": "ヌ"
+    },
+    "answer": "nu"
+  },
+  {
+    "id": "fu",
+    "kana": {
+      "hiragana": "ふ",
+      "katakana": "フ"
+    },
+    "answer": "fu"
+  },
+  {
+    "id": "mu",
+    "kana": {
+      "hiragana": "む",
+      "katakana": "ム"
+    },
+    "answer": "mu"
+  },
+  {
+    "id": "yu",
+    "kana": {
+      "hiragana": "ゆ",
+      "katakana": "ユ"
+    },
+    "answer": "yu"
+  },
+  {
+    "id": "ru",
+    "kana": {
+      "hiragana": "る",
+      "katakana": "ル"
+    },
+    "answer": "ru"
+  },
+  {
+    "id": "e",
+    "kana": {
+      "hiragana": "え",
+      "katakana": "エ"
+    },
+    "answer": "e"
+  },
+  {
+    "id": "ke",
+    "kana": {
+      "hiragana": "け",
+      "katakana": "ケ"
+    },
+    "answer": "ke"
+  },
+  {
+    "id": "se",
+    "kana": {
+      "hiragana": "せ",
+      "katakana": "セ"
+    },
+    "answer": "se"
+  },
+  {
+    "id": "te",
+    "kana": {
+      "hiragana": "て",
+      "katakana": "テ"
+    },
+    "answer": "te"
+  },
+  {
+    "id": "ne",
+    "kana": {
+      "hiragana": "ね",
+      "katakana": "ネ"
+    },
+    "answer": "ne"
+  },
+  {
+    "id": "he",
+    "kana": {
+      "hiragana": "へ",
+      "katakana": "ヘ"
+    },
+    "answer": "he"
+  },
+  {
+    "id": "me",
+    "kana": {
+      "hiragana": "め",
+      "katakana": "メ"
+    },
+    "answer": "me"
+  },
+  {
+    "id": "re",
+    "kana": {
+      "hiragana": "れ",
+      "katakana": "レ"
+    },
+    "answer": "re"
+  },
+  {
+    "id": "o",
+    "kana": {
+      "hiragana": "お",
+      "katakana": "オ"
+    },
+    "answer": "o"
+  },
+  {
+    "id": "ko",
+    "kana": {
+      "hiragana": "こ",
+      "katakana": "コ"
+    },
+    "answer": "ko"
+  },
+  {
+    "id": "so",
+    "kana": {
+      "hiragana": "そ",
+      "katakana": "ソ"
+    },
+    "answer": "so"
+  },
+  {
+    "id": "to",
+    "kana": {
+      "hiragana": "と",
+      "katakana": "ト"
+    },
+    "answer": "to"
+  },
+  {
+    "id": "no",
+    "kana": {
+      "hiragana": "の",
+      "katakana": "ノ"
+    },
+    "answer": "no"
+  },
+  {
+    "id": "ho",
+    "kana": {
+      "hiragana": "ほ",
+      "katakana": "ホ"
+    },
+    "answer": "ho"
+  },
+  {
+    "id": "mo",
+    "kana": {
+      "hiragana": "も",
+      "katakana": "モ"
+    },
+    "answer": "mo"
+  },
+  {
+    "id": "yo",
+    "kana": {
+      "hiragana": "よ",
+      "katakana": "ヨ"
+    },
+    "answer": "yo"
+  },
+  {
+    "id": "ro",
+    "kana": {
+      "hiragana": "ろ",
+      "katakana": "ロ"
+    },
+    "answer": "ro"
+  },
+  {
+    "id": "wo",
+    "kana": {
+      "hiragana": "わ",
+      "katakana": "ワ"
+    },
+    "answer": "wo"
+  },
+  {
+    "id": "n",
+    "kana": {
+      "hiragana": "ん",
+      "katakana": "ン"
+    },
+    "answer": "n"
+  }
+]
