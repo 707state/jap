@@ -27,11 +27,38 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="explore"
+        name="learn"
         options={{
-          title: "Explore",
+          title: "学习",
           tabBarIcon: ({ color }) => (
-            <IconSymbol size={28} name="paperplane.fill" color={color} />
+            <IconSymbol size={28} name="book.fill" color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="kana-list"
+        options={{
+          title: "假名表",
+          tabBarIcon: ({ color }) => (
+            <IconSymbol size={28} name="list.bullet" color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="quiz"
+        options={{
+          title: "测验",
+          tabBarIcon: ({ color }) => (
+            <IconSymbol size={28} name="checkmark.circle.fill" color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="input-learn"
+        options={{
+          title: "输入学习",
+          tabBarIcon: ({ color }) => (
+            <IconSymbol size={28} name="keyboard.fill" color={color} />
           ),
         }}
       />

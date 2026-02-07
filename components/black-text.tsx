@@ -1,35 +1,24 @@
 import { StyleSheet, Text, type TextProps } from "react-native";
 
-import { useThemeColor } from "@/hooks/use-theme-color";
-
-export type ThemedTextProps = TextProps & {
-  lightColor?: string;
-  darkColor?: string;
+export type BlackTextProps = TextProps & {
   type?: "default" | "title" | "defaultSemiBold" | "subtitle" | "link";
-  black?: boolean;
 };
 
-export function ThemedText({
+/**
+ * 黑色文本组件，专门用于在卡片等背景上显示黑色文字
+ * 在亮色和暗色模式下都使用黑色，确保在浅色背景上的可读性
+ */
+export function BlackText({
   style,
-  lightColor,
-  darkColor,
   type = "default",
-  black = false,
   ...rest
-}: ThemedTextProps) {
-  const themeColor = useThemeColor(
-    { light: lightColor, dark: darkColor },
-    "text",
-  );
-  const color = black ? "#000000" : themeColor;
-
+}: BlackTextProps) {
   return (
     <Text
       style={[
-        { color },
+        { color: "#000000" }, // 始终使用黑色
         type === "default" ? styles.default : undefined,
         type === "title" ? styles.title : undefined,
-
         type === "defaultSemiBold" ? styles.defaultSemiBold : undefined,
         type === "subtitle" ? styles.subtitle : undefined,
         type === "link" ? styles.link : undefined,
