@@ -13,6 +13,8 @@ import { ThemedView } from "@/components/themed-view";
 import { ThemedText } from "@/components/themed-text";
 import { useColorScheme } from "@/hooks/use-color-scheme";
 import { Colors } from "@/constants/theme";
+import { SettingsLayout } from "@/components/settings-layout";
+import { useSettings } from "@/contexts/settings-context";
 
 // 定义假名数据类型
 interface KanaData {
@@ -30,6 +32,7 @@ type DisplayMode = "show" | "hide" | "quiz";
 
 export default function LearnScreen() {
   const colorScheme = useColorScheme();
+  const { settings } = useSettings();
   const [kanaData, setKanaData] = useState<KanaData[]>([]);
   const [loading, setLoading] = useState(true);
   const [learningMode, setLearningMode] = useState<LearningMode>("hiragana");
@@ -80,18 +83,31 @@ export default function LearnScreen() {
 
   // 导航到下一个假名
   const goToNext = () => {
-    if (currentIndex < kanaData.length - 1) {
-      setCurrentIndex(currentIndex + 1);
+    if (settings.learningMode === "random") {
+      // 随机模式：随机选择一个假名，但不能是当前这个
+      let newIndex;
+      do {
+        newIndex = Math.floor(Math.random() * kanaData.length);
+      } while (newIndex === currentIndex && kanaData.length > 1);
+
+      setCurrentIndex(newIndex);
       setShowAnswer(false);
     } else {
-      // 回到第一个
-      setCurrentIndex(0);
-      setShowAnswer(false);
+      // 顺序模式：按照顺序导航
+      if (currentIndex < kanaData.length - 1) {
+        setCurrentIndex(currentIndex + 1);
+        setShowAnswer(false);
+      } else {
+        // 回到第一个
+        setCurrentIndex(0);
+        setShowAnswer(false);
+      }
     }
   };
 
   // 导航到上一个假名
   const goToPrevious = () => {
+    // 无论什么模式，上一个都按照顺序导航
     if (currentIndex > 0) {
       setCurrentIndex(currentIndex - 1);
       setShowAnswer(false);
@@ -136,168 +152,189 @@ export default function LearnScreen() {
   }
 
   return (
-    <SafeAreaView style={styles.safeArea}>
-      <ThemedView style={styles.container}>
-        {/* 头部控制区域 */}
-        <View style={styles.header}>
-          <ThemedText type="title">日语50音学习</ThemedText>
+    <SettingsLayout>
+      <SafeAreaView style={styles.safeArea}>
+        <ThemedView style={styles.container}>
+          {/* 头部控制区域 */}
+          <View style={styles.header}>
+            <ThemedText type="title">日语50音学习</ThemedText>
 
-          {/* 学习模式选择 */}
-          <View style={styles.modeSelector}>
-            <TouchableOpacity
-              style={[
-                styles.modeButton,
-                learningMode === "hiragana" && styles.activeModeButton,
-              ]}
-              onPress={() => setLearningMode("hiragana")}
-            >
-              <ThemedText
+            {/* 学习模式选择 */}
+            <View style={styles.modeSelector}>
+              <TouchableOpacity
                 style={[
-                  styles.modeButtonText,
-                  learningMode === "hiragana" && styles.activeModeButtonText,
+                  styles.modeButton,
+                  learningMode === "hiragana" && styles.activeModeButton,
                 ]}
+                onPress={() => setLearningMode("hiragana")}
               >
-                平假名
-              </ThemedText>
-            </TouchableOpacity>
+                <ThemedText
+                  style={[
+                    styles.modeButtonText,
+                    learningMode === "hiragana" && styles.activeModeButtonText,
+                  ]}
+                >
+                  平假名
+                </ThemedText>
+              </TouchableOpacity>
 
-            <TouchableOpacity
-              style={[
-                styles.modeButton,
-                learningMode === "katakana" && styles.activeModeButton,
-              ]}
-              onPress={() => setLearningMode("katakana")}
-            >
-              <ThemedText
+              <TouchableOpacity
                 style={[
-                  styles.modeButtonText,
-                  learningMode === "katakana" && styles.activeModeButtonText,
+                  styles.modeButton,
+                  learningMode === "katakana" && styles.activeModeButton,
                 ]}
+                onPress={() => setLearningMode("katakana")}
               >
-                片假名
-              </ThemedText>
-            </TouchableOpacity>
+                <ThemedText
+                  style={[
+                    styles.modeButtonText,
+                    learningMode === "katakana" && styles.activeModeButtonText,
+                  ]}
+                >
+                  片假名
+                </ThemedText>
+              </TouchableOpacity>
 
-            <TouchableOpacity
-              style={[
-                styles.modeButton,
-                learningMode === "mixed" && styles.activeModeButton,
-              ]}
-              onPress={() => setLearningMode("mixed")}
-            >
-              <ThemedText
+              <TouchableOpacity
                 style={[
-                  styles.modeButtonText,
-                  learningMode === "mixed" && styles.activeModeButtonText,
+                  styles.modeButton,
+                  learningMode === "mixed" && styles.activeModeButton,
                 ]}
+                onPress={() => setLearningMode("mixed")}
               >
-                混合
-              </ThemedText>
-            </TouchableOpacity>
-          </View>
-
-          {/* 进度显示 */}
-          <View style={styles.progressContainer}>
-            <View style={styles.progressBar}>
-              <View
-                style={[
-                  styles.progressFill,
-                  { width: `${getProgressPercentage()}%` },
-                ]}
-              />
+                <ThemedText
+                  style={[
+                    styles.modeButtonText,
+                    learningMode === "mixed" && styles.activeModeButtonText,
+                  ]}
+                >
+                  混合
+                </ThemedText>
+              </TouchableOpacity>
             </View>
-            <ThemedText style={styles.progressText}>
-              {learnedCount} / {kanaData.length} ({getProgressPercentage()}%)
-            </ThemedText>
-          </View>
-        </View>
 
-        {/* 增加间距的空白区域 */}
-        <View style={styles.spacer} />
-
-        {/* 主学习区域 */}
-        <View style={styles.mainContent}>
-          {/* 假名卡片 */}
-          <View style={styles.kanaCard}>
-            <View style={styles.kanaCharacterContainer}>
-              <ThemedText style={styles.kanaCharacter}>
-                {getDisplayKana()}
+            {/* 导航模式显示 */}
+            <View style={styles.navModeContainer}>
+              <ThemedText style={styles.navModeText}>
+                导航模式:{" "}
+                {settings.learningMode === "sequential" ? "顺序" : "随机"}
+              </ThemedText>
+              <ThemedText style={styles.navModeDescription}>
+                {settings.learningMode === "sequential"
+                  ? "上一个/下一个按顺序导航"
+                  : "上一个按顺序，下一个随机"}
               </ThemedText>
             </View>
 
-            {showAnswer && (
-              <View style={styles.answerContainer}>
-                <ThemedText style={styles.answerLabel}>罗马音：</ThemedText>
-                <ThemedText style={styles.answerText}>
-                  {currentKana.answer}
+            {/* 进度显示 */}
+            <View style={styles.progressContainer}>
+              <View style={styles.progressBar}>
+                <View
+                  style={[
+                    styles.progressFill,
+                    { width: `${getProgressPercentage()}%` },
+                  ]}
+                />
+              </View>
+              <ThemedText style={styles.progressText}>
+                {learnedCount} / {kanaData.length} ({getProgressPercentage()}%)
+              </ThemedText>
+            </View>
+          </View>
+
+          {/* 增加间距的空白区域 */}
+          <View style={styles.spacer} />
+
+          {/* 主学习区域 */}
+          <View style={styles.mainContent}>
+            {/* 假名卡片 */}
+            <View style={styles.kanaCard}>
+              <View style={styles.kanaCharacterContainer}>
+                <ThemedText style={styles.kanaCharacter}>
+                  {getDisplayKana()}
                 </ThemedText>
               </View>
-            )}
-          </View>
 
-          {/* 控制按钮 */}
-          <View style={styles.controlButtons}>
-            <TouchableOpacity
-              style={styles.navButton}
-              onPress={goToPrevious}
-              disabled={currentIndex === 0}
-            >
-              <ThemedText
-                style={[
-                  styles.navButtonText,
-                  currentIndex === 0 && styles.disabledButtonText,
-                ]}
+              {showAnswer && (
+                <View style={styles.answerContainer}>
+                  <ThemedText style={styles.answerLabel}>罗马音：</ThemedText>
+                  <ThemedText style={styles.answerText}>
+                    {currentKana.answer}
+                  </ThemedText>
+                </View>
+              )}
+            </View>
+
+            {/* 控制按钮 */}
+            <View style={styles.controlButtons}>
+              <TouchableOpacity
+                style={styles.navButton}
+                onPress={goToPrevious}
+                disabled={currentIndex === 0}
               >
-                上一个
-              </ThemedText>
-            </TouchableOpacity>
+                <ThemedText
+                  style={[
+                    styles.navButtonText,
+                    currentIndex === 0 && styles.disabledButtonText,
+                  ]}
+                >
+                  上一个
+                </ThemedText>
+              </TouchableOpacity>
 
+              <TouchableOpacity
+                style={styles.showAnswerButton}
+                onPress={markAsLearned}
+              >
+                <ThemedText style={styles.showAnswerButtonText}>
+                  {showAnswer ? "已学习" : "显示答案"}
+                </ThemedText>
+              </TouchableOpacity>
+
+              <TouchableOpacity style={styles.navButton} onPress={goToNext}>
+                <ThemedText style={styles.navButtonText}>下一个</ThemedText>
+              </TouchableOpacity>
+            </View>
+
+            {/* 假名信息 */}
+            <View style={styles.kanaInfo}>
+              <ThemedText style={styles.kanaInfoText}>
+                当前: {currentIndex + 1} / {kanaData.length}
+              </ThemedText>
+              <ThemedText style={styles.kanaInfoText}>
+                ID: {currentKana.id}
+              </ThemedText>
+            </View>
+          </View>
+
+          {/* 底部操作区域 */}
+          <View style={styles.footer}>
             <TouchableOpacity
-              style={styles.showAnswerButton}
-              onPress={markAsLearned}
+              style={styles.resetButton}
+              onPress={resetProgress}
             >
-              <ThemedText style={styles.showAnswerButtonText}>
-                {showAnswer ? "已学习" : "显示答案"}
-              </ThemedText>
-            </TouchableOpacity>
-
-            <TouchableOpacity style={styles.navButton} onPress={goToNext}>
-              <ThemedText style={styles.navButtonText}>下一个</ThemedText>
+              <ThemedText style={styles.resetButtonText}>重置进度</ThemedText>
             </TouchableOpacity>
           </View>
 
-          {/* 假名信息 */}
-          <View style={styles.kanaInfo}>
-            <ThemedText style={styles.kanaInfoText}>
-              当前: {currentIndex + 1} / {kanaData.length}
+          {/* 增加底部按钮和说明区域之间的间距 */}
+          <View style={styles.bottomSpacer} />
+
+          {/* 说明区域 */}
+          <View style={styles.instructions}>
+            <ThemedText style={styles.instructionText}>
+              • 点击&quot;显示答案&quot;查看罗马音并标记为已学习
             </ThemedText>
-            <ThemedText style={styles.kanaInfoText}>
-              ID: {currentKana.id}
+            <ThemedText style={styles.instructionText}>
+              • 使用&quot;上一个&quot;/&quot;下一个&quot;按钮导航
+            </ThemedText>
+            <ThemedText style={styles.instructionText}>
+              • 选择不同的学习模式：平假名、片假名或混合
             </ThemedText>
           </View>
-        </View>
-
-        {/* 底部操作区域 */}
-        <View style={styles.footer}>
-          <TouchableOpacity style={styles.resetButton} onPress={resetProgress}>
-            <ThemedText style={styles.resetButtonText}>重置进度</ThemedText>
-          </TouchableOpacity>
-        </View>
-
-        {/* 说明区域 */}
-        <View style={styles.instructions}>
-          <ThemedText style={styles.instructionText}>
-            • 点击&quot;显示答案&quot;查看罗马音并标记为已学习
-          </ThemedText>
-          <ThemedText style={styles.instructionText}>
-            • 使用&quot;上一个&quot;/&quot;下一个&quot;按钮导航
-          </ThemedText>
-          <ThemedText style={styles.instructionText}>
-            • 选择不同的学习模式：平假名、片假名或混合
-          </ThemedText>
-        </View>
-      </ThemedView>
-    </SafeAreaView>
+        </ThemedView>
+      </SafeAreaView>
+    </SettingsLayout>
   );
 }
 
@@ -418,13 +455,14 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     width: "100%",
     marginBottom: 20,
+    gap: 15,
   },
   navButton: {
     paddingHorizontal: 25,
     paddingVertical: 12,
     backgroundColor: "#f0f0f0",
     borderRadius: 25,
-    minWidth: 100,
+    minWidth: 110,
     alignItems: "center",
   },
   navButtonText: {
@@ -436,11 +474,11 @@ const styles = StyleSheet.create({
     color: "#999",
   },
   showAnswerButton: {
-    paddingHorizontal: 30,
+    paddingHorizontal: 35,
     paddingVertical: 12,
     backgroundColor: "#007AFF",
     borderRadius: 25,
-    minWidth: 120,
+    minWidth: 130,
     alignItems: "center",
   },
   showAnswerButtonText: {
@@ -474,14 +512,31 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     color: "white",
   },
+  bottomSpacer: {
+    height: 3,
+  },
   instructions: {
-    marginTop: 20,
+    marginTop: 5,
     padding: 15,
     backgroundColor: "#f8f8f8",
     borderRadius: 10,
   },
   spacer: {
     height: 20,
+  },
+  navModeContainer: {
+    marginTop: 10,
+    alignItems: "center",
+  },
+  navModeText: {
+    fontSize: 14,
+    fontWeight: "600",
+    color: "#007AFF",
+  },
+  navModeDescription: {
+    fontSize: 12,
+    color: "#666",
+    marginTop: 2,
   },
   instructionText: {
     fontSize: 14,

@@ -8,155 +8,162 @@ import { ThemedView } from "@/components/themed-view";
 import { CardContainer } from "@/components/card-container";
 import { Link } from "expo-router";
 import { TouchableOpacity } from "react-native";
+import { SettingsLayout } from "@/components/settings-layout";
 
 export default function HomeScreen() {
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: "#A1CEDC", dark: "#1D3D47" }}
-      headerImage={
-        <Image
-          source={require("@/assets/images/partial-react-logo.png")}
-          style={styles.reactLogo}
-        />
-      }
-    >
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">日语50音学习</ThemedText>
-        <HelloWave />
-      </ThemedView>
+    <SettingsLayout>
+      <ParallaxScrollView
+        headerBackgroundColor={{ light: "#A1CEDC", dark: "#1D3D47" }}
+        headerImage={
+          <Image
+            source={require("@/assets/images/kata.png")}
+            style={styles.reactLogo}
+          />
+        }
+      >
+        <ThemedView style={styles.titleContainer}>
+          <ThemedText type="title">日语50音学习</ThemedText>
+          <HelloWave />
+        </ThemedView>
 
-      {/* 学习入口卡片 */}
-      <ThemedView style={styles.learningCard}>
-        <ThemedText type="subtitle" style={styles.cardTitle}>
-          开始学习
-        </ThemedText>
-        <ThemedText style={styles.cardDescription}>
-          点击下方按钮开始学习日语50音，包含平假名和片假名。
-        </ThemedText>
+        {/* 学习入口卡片 */}
+        <ThemedView style={styles.learningCard}>
+          <ThemedText type="subtitle" style={styles.cardTitle}>
+            开始学习
+          </ThemedText>
+          <ThemedText style={styles.cardDescription}>
+            点击下方按钮开始学习日语50音，包含平假名和片假名。
+          </ThemedText>
 
-        <Link href="/learn" asChild>
-          <TouchableOpacity style={styles.startButton}>
-            <ThemedText style={styles.startButtonText}>开始学习</ThemedText>
-          </TouchableOpacity>
-        </Link>
-      </ThemedView>
+          <Link href="/learn" asChild>
+            <TouchableOpacity style={styles.startButton}>
+              <ThemedText style={styles.startButtonText}>开始学习</ThemedText>
+            </TouchableOpacity>
+          </Link>
+        </ThemedView>
 
-      {/* 功能说明 */}
-      <CardContainer title="学习功能">
-        <ThemedText>
-          • <ThemedText type="defaultSemiBold">平假名学习</ThemedText>
-          ：学习あ、い、う、え、お等平假名
-        </ThemedText>
-        <ThemedText>
-          • <ThemedText type="defaultSemiBold">片假名学习</ThemedText>
-          ：学习ア、イ、ウ、エ、オ等片假名
-        </ThemedText>
-        <ThemedText>
-          • <ThemedText type="defaultSemiBold">混合练习</ThemedText>
-          ：随机显示平假名或片假名
-        </ThemedText>
-        <ThemedText>
-          • <ThemedText type="defaultSemiBold">进度跟踪</ThemedText>
-          ：记录学习进度
-        </ThemedText>
-        <ThemedText>
-          • <ThemedText type="defaultSemiBold">假名表</ThemedText>
-          ：查看完整的50音图表
-        </ThemedText>
-        <ThemedText>
-          • <ThemedText type="defaultSemiBold">发音练习</ThemedText>
-          ：学习正确发音
-        </ThemedText>
-        <ThemedText>
-          • <ThemedText type="defaultSemiBold">知识测验</ThemedText>
-          ：测试学习成果
-        </ThemedText>
-        <ThemedText>
-          • <ThemedText type="defaultSemiBold">输入学习</ThemedText>
-          ：输入读音进行测试，错误自动复习
-        </ThemedText>
-      </CardContainer>
+        {/* 功能说明 */}
+        <CardContainer title="学习功能">
+          <ThemedText>
+            • <ThemedText type="defaultSemiBold">平假名学习</ThemedText>
+            ：学习あ、い、う、え、お等平假名
+          </ThemedText>
+          <ThemedText>
+            • <ThemedText type="defaultSemiBold">片假名学习</ThemedText>
+            ：学习ア、イ、ウ、エ、オ等片假名
+          </ThemedText>
+          <ThemedText>
+            • <ThemedText type="defaultSemiBold">混合练习</ThemedText>
+            ：随机显示平假名或片假名
+          </ThemedText>
+          <ThemedText>
+            • <ThemedText type="defaultSemiBold">进度跟踪</ThemedText>
+            ：记录学习进度
+          </ThemedText>
+          <ThemedText>
+            • <ThemedText type="defaultSemiBold">假名表</ThemedText>
+            ：查看完整的50音图表
+          </ThemedText>
+          <ThemedText>
+            • <ThemedText type="defaultSemiBold">发音练习</ThemedText>
+            ：学习正确发音
+          </ThemedText>
+          <ThemedText>
+            • <ThemedText type="defaultSemiBold">知识测验</ThemedText>
+            ：测试学习成果
+          </ThemedText>
+          <ThemedText>
+            • <ThemedText type="defaultSemiBold">输入学习</ThemedText>
+            ：输入读音进行测试，错误自动复习
+          </ThemedText>
+        </CardContainer>
 
-      {/* 数据统计 */}
-      <CardContainer title="数据统计">
-        <ThemedText>
-          当前包含 <ThemedText type="defaultSemiBold">46个</ThemedText> 假名
-        </ThemedText>
-        <ThemedText>
-          包含：<ThemedText type="defaultSemiBold">5个元音</ThemedText> +{" "}
-          <ThemedText type="defaultSemiBold">41个辅音</ThemedText>
-        </ThemedText>
-      </CardContainer>
+        {/* 数据统计 */}
+        <CardContainer title="数据统计">
+          <ThemedText>
+            当前包含 <ThemedText type="defaultSemiBold">46个</ThemedText> 假名
+          </ThemedText>
+          <ThemedText>
+            包含：<ThemedText type="defaultSemiBold">5个元音</ThemedText> +{" "}
+            <ThemedText type="defaultSemiBold">41个辅音</ThemedText>
+          </ThemedText>
+        </CardContainer>
 
-      {/* 快速入口 */}
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle" darkColor="black">
-          快速入口
-        </ThemedText>
-        <View style={styles.quickLinks}>
-          <View style={styles.quickLinksRow}>
-            <Link href="/learn" asChild>
-              <TouchableOpacity
-                style={[styles.quickLinkButton, styles.primaryButton]}
-              >
-                <ThemedText style={[styles.quickLinkText, styles.primaryText]}>
-                  开始学习
-                </ThemedText>
-              </TouchableOpacity>
-            </Link>
-            <Link href="/kana-list" asChild>
-              <TouchableOpacity
-                style={[styles.quickLinkButton, styles.secondaryButton]}
-              >
-                <ThemedText
-                  style={[styles.quickLinkText, styles.secondaryText]}
+        {/* 快速入口 */}
+        <ThemedView style={styles.stepContainer}>
+          <ThemedText type="subtitle" darkColor="black">
+            快速入口
+          </ThemedText>
+          <View style={styles.quickLinks}>
+            <View style={styles.quickLinksRow}>
+              <Link href="/learn" asChild>
+                <TouchableOpacity
+                  style={[styles.quickLinkButton, styles.primaryButton]}
                 >
-                  假名表
-                </ThemedText>
-              </TouchableOpacity>
-            </Link>
-          </View>
-          <View style={styles.quickLinksRow}>
-            <Link href="/quiz" asChild>
-              <TouchableOpacity
-                style={[styles.quickLinkButton, styles.tertiaryButton]}
-              >
-                <ThemedText style={[styles.quickLinkText, styles.tertiaryText]}>
-                  测验
-                </ThemedText>
-              </TouchableOpacity>
-            </Link>
-            <Link href="/input-learn" asChild>
-              <TouchableOpacity
-                style={[styles.quickLinkButton, styles.quaternaryButton]}
-              >
-                <ThemedText
-                  style={[styles.quickLinkText, styles.quaternaryText]}
+                  <ThemedText
+                    style={[styles.quickLinkText, styles.primaryText]}
+                  >
+                    开始学习
+                  </ThemedText>
+                </TouchableOpacity>
+              </Link>
+              <Link href="/kana-list" asChild>
+                <TouchableOpacity
+                  style={[styles.quickLinkButton, styles.secondaryButton]}
                 >
-                  输入学习
-                </ThemedText>
-              </TouchableOpacity>
-            </Link>
+                  <ThemedText
+                    style={[styles.quickLinkText, styles.secondaryText]}
+                  >
+                    假名表
+                  </ThemedText>
+                </TouchableOpacity>
+              </Link>
+            </View>
+            <View style={styles.quickLinksRow}>
+              <Link href="/quiz" asChild>
+                <TouchableOpacity
+                  style={[styles.quickLinkButton, styles.tertiaryButton]}
+                >
+                  <ThemedText
+                    style={[styles.quickLinkText, styles.tertiaryText]}
+                  >
+                    测验
+                  </ThemedText>
+                </TouchableOpacity>
+              </Link>
+              <Link href="/input-learn" asChild>
+                <TouchableOpacity
+                  style={[styles.quickLinkButton, styles.quaternaryButton]}
+                >
+                  <ThemedText
+                    style={[styles.quickLinkText, styles.quaternaryText]}
+                  >
+                    输入学习
+                  </ThemedText>
+                </TouchableOpacity>
+              </Link>
+            </View>
           </View>
-        </View>
-      </ThemedView>
+        </ThemedView>
 
-      <CardContainer title="开发说明">
-        <ThemedText>
-          编辑{" "}
-          <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText>{" "}
-          查看变化。 按{" "}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: "cmd + d",
-              android: "cmd + m",
-              web: "F12",
-            })}
-          </ThemedText>{" "}
-          打开开发者工具。
-        </ThemedText>
-      </CardContainer>
-    </ParallaxScrollView>
+        <CardContainer title="开发说明">
+          <ThemedText>
+            编辑{" "}
+            <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText>{" "}
+            查看变化。 按{" "}
+            <ThemedText type="defaultSemiBold">
+              {Platform.select({
+                ios: "cmd + d",
+                android: "cmd + m",
+                web: "F12",
+              })}
+            </ThemedText>{" "}
+            打开开发者工具。
+          </ThemedText>
+        </CardContainer>
+      </ParallaxScrollView>
+    </SettingsLayout>
   );
 }
 

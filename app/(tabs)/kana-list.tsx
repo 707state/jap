@@ -13,6 +13,7 @@ import { ThemedView } from "@/components/themed-view";
 import { ThemedText } from "@/components/themed-text";
 import { useColorScheme } from "@/hooks/use-color-scheme";
 import { Colors } from "@/constants/theme";
+import { SettingsLayout } from "@/components/settings-layout";
 
 // 定义假名数据类型
 interface KanaData {
@@ -168,111 +169,113 @@ export default function KanaListScreen() {
   }
 
   return (
-    <SafeAreaView style={styles.safeArea}>
-      <ThemedView style={styles.container}>
-        {/* 头部 */}
-        <View style={styles.header}>
-          <ThemedText type="title">日语50音表</ThemedText>
-          <ThemedText style={styles.subtitle}>
-            点击假名查看详细信息，共 {kanaData.length} 个假名
-          </ThemedText>
+    <SettingsLayout>
+      <SafeAreaView style={styles.safeArea}>
+        <ThemedView style={styles.container}>
+          {/* 头部 */}
+          <View style={styles.header}>
+            <ThemedText type="title">日语50音表</ThemedText>
+            <ThemedText style={styles.subtitle}>
+              点击假名查看详细信息，共 {kanaData.length} 个假名
+            </ThemedText>
 
-          {/* 显示模式选择 */}
-          <View style={styles.modeSelector}>
-            <TouchableOpacity
-              style={[
-                styles.modeButton,
-                showMode === "both" && styles.activeModeButton,
-              ]}
-              onPress={() => setShowMode("both")}
-            >
-              <Text
+            {/* 显示模式选择 */}
+            <View style={styles.modeSelector}>
+              <TouchableOpacity
                 style={[
-                  styles.modeButtonText,
-                  showMode === "both" && styles.activeModeButtonText,
+                  styles.modeButton,
+                  showMode === "both" && styles.activeModeButton,
                 ]}
+                onPress={() => setShowMode("both")}
               >
-                全部显示
-              </Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              style={[
-                styles.modeButton,
-                showMode === "hiragana" && styles.activeModeButton,
-              ]}
-              onPress={() => setShowMode("hiragana")}
-            >
-              <Text
-                style={[
-                  styles.modeButtonText,
-                  showMode === "hiragana" && styles.activeModeButtonText,
-                ]}
-              >
-                仅平假名
-              </Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              style={[
-                styles.modeButton,
-                showMode === "katakana" && styles.activeModeButton,
-              ]}
-              onPress={() => setShowMode("katakana")}
-            >
-              <Text
-                style={[
-                  styles.modeButtonText,
-                  showMode === "katakana" && styles.activeModeButtonText,
-                ]}
-              >
-                仅片假名
-              </Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-
-        {/* 假名列表 */}
-        <SectionList
-          sections={getGroupedKanaData()}
-          keyExtractor={(item) => item.id}
-          renderItem={({ item }) => renderKanaCard(item)}
-          renderSectionHeader={renderSectionHeader}
-          stickySectionHeadersEnabled={true}
-          contentContainerStyle={styles.listContent}
-          showsVerticalScrollIndicator={false}
-        />
-
-        {/* 选中的假名详情 */}
-        {selectedKana && (
-          <View style={styles.selectedDetail}>
-            <ThemedText type="subtitle">详细信息</ThemedText>
-            <View style={styles.detailGrid}>
-              <View style={styles.detailItem}>
-                <Text style={styles.detailLabel}>平假名</Text>
-                <Text style={styles.detailValue}>
-                  {selectedKana.kana.hiragana}
+                <Text
+                  style={[
+                    styles.modeButtonText,
+                    showMode === "both" && styles.activeModeButtonText,
+                  ]}
+                >
+                  全部显示
                 </Text>
-              </View>
-              <View style={styles.detailItem}>
-                <Text style={styles.detailLabel}>片假名</Text>
-                <Text style={styles.detailValue}>
-                  {selectedKana.kana.katakana}
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                style={[
+                  styles.modeButton,
+                  showMode === "hiragana" && styles.activeModeButton,
+                ]}
+                onPress={() => setShowMode("hiragana")}
+              >
+                <Text
+                  style={[
+                    styles.modeButtonText,
+                    showMode === "hiragana" && styles.activeModeButtonText,
+                  ]}
+                >
+                  仅平假名
                 </Text>
-              </View>
-              <View style={styles.detailItem}>
-                <Text style={styles.detailLabel}>罗马音</Text>
-                <Text style={styles.detailValue}>{selectedKana.answer}</Text>
-              </View>
-              <View style={styles.detailItem}>
-                <Text style={styles.detailLabel}>ID</Text>
-                <Text style={styles.detailValue}>{selectedKana.id}</Text>
-              </View>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                style={[
+                  styles.modeButton,
+                  showMode === "katakana" && styles.activeModeButton,
+                ]}
+                onPress={() => setShowMode("katakana")}
+              >
+                <Text
+                  style={[
+                    styles.modeButtonText,
+                    showMode === "katakana" && styles.activeModeButtonText,
+                  ]}
+                >
+                  仅片假名
+                </Text>
+              </TouchableOpacity>
             </View>
           </View>
-        )}
-      </ThemedView>
-    </SafeAreaView>
+
+          {/* 假名列表 */}
+          <SectionList
+            sections={getGroupedKanaData()}
+            keyExtractor={(item) => item.id}
+            renderItem={({ item }) => renderKanaCard(item)}
+            renderSectionHeader={renderSectionHeader}
+            stickySectionHeadersEnabled={true}
+            contentContainerStyle={styles.listContent}
+            showsVerticalScrollIndicator={false}
+          />
+
+          {/* 选中的假名详情 */}
+          {selectedKana && (
+            <View style={styles.selectedDetail}>
+              <ThemedText type="subtitle">详细信息</ThemedText>
+              <View style={styles.detailGrid}>
+                <View style={styles.detailItem}>
+                  <Text style={styles.detailLabel}>平假名</Text>
+                  <Text style={styles.detailValue}>
+                    {selectedKana.kana.hiragana}
+                  </Text>
+                </View>
+                <View style={styles.detailItem}>
+                  <Text style={styles.detailLabel}>片假名</Text>
+                  <Text style={styles.detailValue}>
+                    {selectedKana.kana.katakana}
+                  </Text>
+                </View>
+                <View style={styles.detailItem}>
+                  <Text style={styles.detailLabel}>罗马音</Text>
+                  <Text style={styles.detailValue}>{selectedKana.answer}</Text>
+                </View>
+                <View style={styles.detailItem}>
+                  <Text style={styles.detailLabel}>ID</Text>
+                  <Text style={styles.detailValue}>{selectedKana.id}</Text>
+                </View>
+              </View>
+            </View>
+          )}
+        </ThemedView>
+      </SafeAreaView>
+    </SettingsLayout>
   );
 }
 
