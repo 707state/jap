@@ -64,7 +64,9 @@ export default function KanaListScreen() {
     );
     const kGroup = kanaData.filter((k) => k.id.startsWith("k"));
     const sGroup = kanaData.filter((k) => k.id.startsWith("s"));
-    const tGroup = kanaData.filter((k) => k.id.startsWith("t"));
+    const tGroup = kanaData.filter(
+      (k) => k.id.startsWith("t") || k.id.startsWith("c"),
+    );
     const nGroup = kanaData.filter((k) => k.id.startsWith("n"));
     const hGroup = kanaData.filter((k) => k.id.startsWith("h"));
     const mGroup = kanaData.filter((k) => k.id.startsWith("m"));

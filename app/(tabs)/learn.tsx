@@ -1,18 +1,14 @@
 import React, { useState, useEffect } from "react";
 import {
   View,
-  Text,
   StyleSheet,
   TouchableOpacity,
-  ScrollView,
   SafeAreaView,
   Dimensions,
   Alert,
 } from "react-native";
 import { ThemedView } from "@/components/themed-view";
 import { ThemedText } from "@/components/themed-text";
-import { useColorScheme } from "@/hooks/use-color-scheme";
-import { Colors } from "@/constants/theme";
 import { SettingsLayout } from "@/components/settings-layout";
 import { useSettings } from "@/contexts/settings-context";
 
@@ -28,15 +24,12 @@ interface KanaData {
 
 // 学习模式
 type LearningMode = "hiragana" | "katakana" | "mixed";
-type DisplayMode = "show" | "hide" | "quiz";
 
 export default function LearnScreen() {
-  const colorScheme = useColorScheme();
   const { settings } = useSettings();
   const [kanaData, setKanaData] = useState<KanaData[]>([]);
   const [loading, setLoading] = useState(true);
   const [learningMode, setLearningMode] = useState<LearningMode>("hiragana");
-  const [displayMode, setDisplayMode] = useState<DisplayMode>("show");
   const [currentIndex, setCurrentIndex] = useState(0);
   const [showAnswer, setShowAnswer] = useState(false);
   const [learnedCount, setLearnedCount] = useState(0);
@@ -253,18 +246,17 @@ export default function LearnScreen() {
                 <ThemedText style={styles.kanaCharacter}>
                   {getDisplayKana()}
                 </ThemedText>
+
+                {showAnswer && (
+                  <View style={styles.answerContainer}>
+                    <ThemedText style={styles.answerLabel}>罗马音：</ThemedText>
+                    <ThemedText style={styles.answerText} numberOfLines={2}>
+                      {currentKana.answer}
+                    </ThemedText>
+                  </View>
+                )}
               </View>
-
-              {showAnswer && (
-                <View style={styles.answerContainer}>
-                  <ThemedText style={styles.answerLabel}>罗马音：</ThemedText>
-                  <ThemedText style={styles.answerText}>
-                    {currentKana.answer}
-                  </ThemedText>
-                </View>
-              )}
             </View>
-
             {/* 控制按钮 */}
             <View style={styles.controlButtons}>
               <TouchableOpacity
@@ -405,7 +397,8 @@ const styles = StyleSheet.create({
   },
   kanaCard: {
     width: width * 0.85,
-    height: width * 0.85,
+    minHeight: width * 0.85,
+    maxHeight: height * 0.6,
     backgroundColor: "white",
     borderRadius: 20,
     justifyContent: "center",
@@ -422,23 +415,27 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   kanaCharacter: {
-    fontSize: 140,
+    fontSize: 100,
     fontWeight: "bold",
     color: "#333",
     textAlign: "center",
     textAlignVertical: "center",
     includeFontPadding: false,
-    lineHeight: 140,
+    lineHeight: 100,
   },
   kanaCharacterContainer: {
     width: "100%",
-    height: 160,
+    flex: 1,
     justifyContent: "center",
     alignItems: "center",
+    paddingVertical: 10,
   },
+
   answerContainer: {
-    marginTop: 20,
+    width: "100%",
     alignItems: "center",
+    marginTop: 30,
+    paddingHorizontal: 10,
   },
   answerLabel: {
     fontSize: 16,
@@ -446,9 +443,13 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   answerText: {
-    fontSize: 32,
+    fontSize: 28,
     fontWeight: "bold",
     color: "#007AFF",
+    textAlign: "center",
+    flexWrap: "wrap",
+    flexShrink: 1,
+    lineHeight: 32,
   },
   controlButtons: {
     flexDirection: "row",
