@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "learn_rn",
-    "slug": "learn_rn",
+    "name": "jap",
+    "slug": "jap",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -15,7 +15,7 @@
     "android": {
       "edgeToEdgeEnabled": true,
       "predictiveBackGestureEnabled": false,
-      "package": "com.anonymous.learn_rn"
+      "package": "com.anonymous.jap"
     },
     "web": {
       "output": "static",
