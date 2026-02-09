@@ -11,6 +11,8 @@ import { ThemedView } from "@/components/themed-view";
 import { ThemedText } from "@/components/themed-text";
 import { SettingsLayout } from "@/components/settings-layout";
 import { useSettings } from "@/contexts/settings-context";
+import Tts from "react-native-tts";
+import { Ionicons } from "@expo/vector-icons";
 
 // 定义假名数据类型
 interface KanaData {
@@ -33,11 +35,83 @@ export default function LearnScreen() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [showAnswer, setShowAnswer] = useState(false);
   const [learnedCount, setLearnedCount] = useState(0);
+  const [isSpeaking, setIsSpeaking] = useState(false);
+  const [ttsAvailable, setTtsAvailable] = useState(true);
 
   // 加载数据
   useEffect(() => {
     loadKanaData();
+    initializeTts();
+
+    // 清理函数
+    return () => {
+      Tts.stop();
+    };
   }, []);
+
+  // 初始化 TTS
+  const initializeTts = async () => {
+    let default_engine = await Tts.setDefaultEngine("com.google.android.tts");
+    if (!default_engine) {
+      setTtsAvailable(false);
+      return;
+    }
+    await Tts.getInitStatus();
+    try {
+      // 检查 TTS 是否可用
+      const voices = await Tts.voices();
+      const available = voices.filter((v) => !v.notInstalled);
+      console.log("Engines:", await Tts.engines());
+      if (available.length === 0) {
+        setTtsAvailable(false);
+        console.warn("No TTS voices available");
+        return;
+      }
+
+      // 设置日语语音
+      const japaneseVoices = voices.filter(
+        (voice) =>
+          voice.language.includes("ja") || voice.language.includes("JP"),
+      );
+
+      if (japaneseVoices.length > 0) {
+        await Tts.setDefaultVoice(japaneseVoices[0].id);
+      }
+
+      await Tts.setDefaultLanguage("ja-JP");
+      await Tts.setDefaultRate(0.5);
+      await Tts.setDefaultPitch(1.0);
+      setTtsAvailable(true);
+    } catch (error) {
+      console.error("Failed to initialize TTS:", error);
+      setTtsAvailable(false);
+    }
+  };
+
+  // 朗读当前假名
+  const speakCurrentKana = async () => {
+    if (isSpeaking || !currentKana || !ttsAvailable) return;
+
+    try {
+      setIsSpeaking(true);
+      const textToSpeak = getDisplayKana();
+
+      // 先停止任何正在进行的语音
+      await Tts.stop();
+
+      // 设置语音参数
+      await Tts.setDefaultLanguage("ja-JP");
+      await Tts.setDefaultRate(0.5);
+      await Tts.setDefaultPitch(1.0);
+
+      // 朗读
+      await Tts.speak(textToSpeak);
+    } catch (error) {
+      console.error("Failed to speak:", error);
+      setIsSpeaking(false);
+      Alert.alert("语音错误", "无法朗读当前假名，请检查系统语音设置");
+    }
+  };
 
   const loadKanaData = async () => {
     try {
@@ -51,6 +125,24 @@ export default function LearnScreen() {
       setLoading(false);
     }
   };
+
+  // 监听 TTS 完成事件
+  useEffect(() => {
+    let isMounted = true;
+
+    const onTtsFinish = () => {
+      if (isMounted) {
+        setIsSpeaking(false);
+      }
+    };
+
+    Tts.addEventListener("tts-finish", onTtsFinish);
+
+    return () => {
+      isMounted = false;
+      Tts.removeEventListener("tts-finish", onTtsFinish);
+    };
+  }, []);
 
   // 获取当前假名
   const currentKana = kanaData[currentIndex];
@@ -307,6 +399,36 @@ export default function LearnScreen() {
             >
               <ThemedText style={styles.resetButtonText}>重置进度</ThemedText>
             </TouchableOpacity>
+
+            <TouchableOpacity
+              style={[
+                styles.soundButton,
+                isSpeaking && styles.soundButtonActive,
+                !ttsAvailable && styles.soundButtonDisabled,
+              ]}
+              onPress={speakCurrentKana}
+              disabled={isSpeaking || !ttsAvailable}
+            >
+              <Ionicons
+                name={isSpeaking ? "volume-high" : "volume-medium"}
+                size={24}
+                color={
+                  isSpeaking ? "#007AFF" : !ttsAvailable ? "#999" : "white"
+                }
+              />
+              <ThemedText
+                style={[
+                  styles.soundButtonText,
+                  !ttsAvailable && styles.soundButtonTextDisabled,
+                ]}
+              >
+                {isSpeaking
+                  ? "朗读中..."
+                  : !ttsAvailable
+                    ? "语音不可用"
+                    : "朗读"}
+              </ThemedText>
+            </TouchableOpacity>
           </View>
 
           {/* 增加底部按钮和说明区域之间的间距 */}
@@ -498,6 +620,8 @@ const styles = StyleSheet.create({
     color: "#666",
   },
   footer: {
+    flexDirection: "row",
+    justifyContent: "center",
     alignItems: "center",
     marginTop: 20,
     marginBottom: 10,
@@ -507,11 +631,36 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     backgroundColor: "#FF3B30",
     borderRadius: 20,
+    marginRight: 10,
   },
   resetButtonText: {
     fontSize: 14,
     fontWeight: "600",
     color: "white",
+  },
+  soundButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    backgroundColor: "#34C759",
+    borderRadius: 20,
+    marginLeft: 10,
+  },
+  soundButtonActive: {
+    backgroundColor: "#E8F5E9",
+  },
+  soundButtonDisabled: {
+    backgroundColor: "#E0E0E0",
+  },
+  soundButtonText: {
+    fontSize: 14,
+    fontWeight: "600",
+    color: "white",
+    marginLeft: 8,
+  },
+  soundButtonTextDisabled: {
+    color: "#999",
   },
   bottomSpacer: {
     height: 3,
