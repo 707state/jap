@@ -144,6 +144,19 @@ export default function HomeScreen() {
                 </TouchableOpacity>
               </Link>
             </View>
+            <View style={styles.quickLinksRow}>
+              <Link href="/vocabulary" asChild>
+                <TouchableOpacity
+                  style={[styles.quickLinkButton, styles.quinaryButton]}
+                >
+                  <ThemedText
+                    style={[styles.quickLinkText, styles.quinaryText]}
+                  >
+                    词汇管理
+                  </ThemedText>
+                </TouchableOpacity>
+              </Link>
+            </View>
           </View>
         </ThemedView>
 
@@ -238,6 +251,10 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFFFFF", // 白色背景
     borderColor: "#9370DB", // 中紫色边框
   },
+  quinaryButton: {
+    backgroundColor: "#FFFFFF", // 白色背景
+    borderColor: "#20B2AA", // 浅海洋绿边框
+  },
   quickLinkText: {
     fontSize: 16,
     fontWeight: "600",
@@ -253,6 +270,9 @@ const styles = StyleSheet.create({
   },
   quaternaryText: {
     color: "#9370DB", // 中紫色文字
+  },
+  quinaryText: {
+    color: "#20B2AA", // 浅海洋绿文字
   },
   reactLogo: {
     height: 178,

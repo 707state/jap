@@ -46,6 +46,12 @@ export default function TabLayout() {
           title: "输入学习",
         }}
       />
+      <Stack.Screen
+        name="vocabulary"
+        options={{
+          title: "词汇管理",
+        }}
+      />
     </Stack>
   );
 }

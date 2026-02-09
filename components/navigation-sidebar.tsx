@@ -68,6 +68,12 @@ export const NavigationSidebar: React.FC<NavigationSidebarProps> = ({
       iconName: "keyboard",
       route: "/(tabs)/input-learn",
     },
+    {
+      id: "vocabulary",
+      title: "词汇管理",
+      iconName: "bookmark",
+      route: "/(tabs)/vocabulary",
+    },
   ];
 
   React.useEffect(() => {
