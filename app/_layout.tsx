@@ -7,6 +7,7 @@ import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import "react-native-reanimated";
 import { useState } from "react";
+import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 
 import { useColorScheme } from "@/hooks/use-color-scheme";
 import { SettingsProvider } from "@/contexts/settings-context";
@@ -30,30 +31,36 @@ export default function RootLayout() {
   };
 
   return (
-    <SettingsProvider>
-      <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-        <Stack>
-          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-          <Stack.Screen
-            name="modal"
-            options={{ presentation: "modal", title: "Modal" }}
-          />
-        </Stack>
+    <SafeAreaProvider>
+      <SettingsProvider>
+        <ThemeProvider
+          value={colorScheme === "dark" ? DarkTheme : DefaultTheme}
+        >
+          <SafeAreaView style={{ flex: 1 }}>
+            <Stack>
+              <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+              <Stack.Screen
+                name="modal"
+                options={{ presentation: "modal", title: "Modal" }}
+              />
+            </Stack>
 
-        {/* 导航触发器 */}
-        <NavigationTrigger
-          onPress={toggleNavigation}
-          isOpen={isNavOpen}
-          position="top-left"
-          showLabel={false}
-          size="medium"
-        />
+            {/* 导航触发器 */}
+            <NavigationTrigger
+              onPress={toggleNavigation}
+              isOpen={isNavOpen}
+              position="top-left"
+              showLabel={false}
+              size="medium"
+            />
 
-        {/* 导航侧边栏 */}
-        <NavigationSidebar isOpen={isNavOpen} onClose={closeNavigation} />
+            {/* 导航侧边栏 */}
+            <NavigationSidebar isOpen={isNavOpen} onClose={closeNavigation} />
 
-        <StatusBar style="auto" />
-      </ThemeProvider>
-    </SettingsProvider>
+            <StatusBar style="auto" />
+          </SafeAreaView>
+        </ThemeProvider>
+      </SettingsProvider>
+    </SafeAreaProvider>
   );
 }
