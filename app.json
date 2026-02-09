@@ -34,7 +34,8 @@
             "backgroundColor": "#000000"
           }
         }
-      ]
+      ],
+      "./plugins/withTTSQueries"
     ],
     "experiments": {
       "typedRoutes": true,

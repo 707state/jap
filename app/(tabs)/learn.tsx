@@ -348,6 +348,25 @@ export default function LearnScreen() {
                   </View>
                 )}
               </View>
+
+              {/* 朗读按钮 - 放置在卡片右下角 */}
+              <TouchableOpacity
+                style={[
+                  styles.soundButtonInCard,
+                  isSpeaking && styles.soundButtonInCardActive,
+                  !ttsAvailable && styles.soundButtonInCardDisabled,
+                ]}
+                onPress={speakCurrentKana}
+                disabled={isSpeaking || !ttsAvailable}
+              >
+                <Ionicons
+                  name={isSpeaking ? "volume-high" : "volume-medium"}
+                  size={20}
+                  color={
+                    isSpeaking ? "#007AFF" : !ttsAvailable ? "#999" : "#333"
+                  }
+                />
+              </TouchableOpacity>
             </View>
             {/* 控制按钮 */}
             <View style={styles.controlButtons}>
@@ -398,36 +417,6 @@ export default function LearnScreen() {
               onPress={resetProgress}
             >
               <ThemedText style={styles.resetButtonText}>重置进度</ThemedText>
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              style={[
-                styles.soundButton,
-                isSpeaking && styles.soundButtonActive,
-                !ttsAvailable && styles.soundButtonDisabled,
-              ]}
-              onPress={speakCurrentKana}
-              disabled={isSpeaking || !ttsAvailable}
-            >
-              <Ionicons
-                name={isSpeaking ? "volume-high" : "volume-medium"}
-                size={24}
-                color={
-                  isSpeaking ? "#007AFF" : !ttsAvailable ? "#999" : "white"
-                }
-              />
-              <ThemedText
-                style={[
-                  styles.soundButtonText,
-                  !ttsAvailable && styles.soundButtonTextDisabled,
-                ]}
-              >
-                {isSpeaking
-                  ? "朗读中..."
-                  : !ttsAvailable
-                    ? "语音不可用"
-                    : "朗读"}
-              </ThemedText>
             </TouchableOpacity>
           </View>
 
@@ -552,6 +541,31 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingVertical: 10,
   },
+  soundButtonInCard: {
+    position: "absolute",
+    bottom: 15,
+    right: 15,
+    width: 40,
+    height: 40,
+    backgroundColor: "white",
+    borderRadius: 20,
+    justifyContent: "center",
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 1.41,
+    elevation: 2,
+  },
+  soundButtonInCardActive: {
+    backgroundColor: "#E6F2FF",
+  },
+  soundButtonInCardDisabled: {
+    backgroundColor: "#F5F5F5",
+  },
 
   answerContainer: {
     width: "100%",
@@ -638,30 +652,7 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     color: "white",
   },
-  soundButton: {
-    flexDirection: "row",
-    alignItems: "center",
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-    backgroundColor: "#34C759",
-    borderRadius: 20,
-    marginLeft: 10,
-  },
-  soundButtonActive: {
-    backgroundColor: "#E8F5E9",
-  },
-  soundButtonDisabled: {
-    backgroundColor: "#E0E0E0",
-  },
-  soundButtonText: {
-    fontSize: 14,
-    fontWeight: "600",
-    color: "white",
-    marginLeft: 8,
-  },
-  soundButtonTextDisabled: {
-    color: "#999",
-  },
+
   bottomSpacer: {
     height: 3,
   },
