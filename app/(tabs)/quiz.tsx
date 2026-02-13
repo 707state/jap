@@ -1,17 +1,16 @@
-import React, { useState, useEffect } from "react";
+import { ThemedText } from "@/components/themed-text";
+import { ThemedView } from "@/components/themed-view";
+import { useColorScheme } from "@/hooks/use-color-scheme";
+import React, { useEffect, useState } from "react";
 import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  SafeAreaView,
   Alert,
   Dimensions,
+  SafeAreaView,
+  ScrollView,
+  StyleSheet,
+  TouchableOpacity,
+  View
 } from "react-native";
-import { ThemedView } from "@/components/themed-view";
-import { ThemedText } from "@/components/themed-text";
-import { useColorScheme } from "@/hooks/use-color-scheme";
-import { Colors } from "@/constants/theme";
 
 // 定义假名数据类型
 interface KanaData {
@@ -117,9 +116,14 @@ export default function QuizScreen() {
 
     if (correct) {
       setScore((prev) => prev + 1);
+      // 答对后延迟自动进入下一题
+      setTimeout(() => {
+        nextQuestion();
+      }, 1000);
+    } else {
+      // 答错进入答案状态，显示反馈
+      setQuizState("answer");
     }
-
-    setQuizState("answer");
   };
 
   // 下一题
@@ -174,7 +178,12 @@ export default function QuizScreen() {
 
   return (
     <SafeAreaView style={styles.safeArea}>
-      <ThemedView style={styles.container}>
+      <ScrollView 
+        style={styles.scrollView}
+        contentContainerStyle={styles.scrollContent}
+        showsVerticalScrollIndicator={false}
+      >
+        <ThemedView style={styles.container}>
         {/* 头部 */}
         <View style={styles.header}>
           <ThemedText type="title">日语50音测验</ThemedText>
@@ -283,16 +292,16 @@ export default function QuizScreen() {
               ))}
             </View>
 
-            {/* 答案反馈 */}
-            {quizState === "answer" && (
+            {/* 答案反馈 - 只在答错时显示按钮 */}
+            {quizState === "answer" && !isCorrect && (
               <View
                 style={[
                   styles.feedbackContainer,
-                  isCorrect ? styles.correctFeedback : styles.wrongFeedback,
+                  styles.wrongFeedback,
                 ]}
               >
                 <ThemedText style={styles.feedbackText}>
-                  {isCorrect ? "✓ 回答正确！" : "✗ 回答错误"}
+                  ✗ 回答错误
                 </ThemedText>
                 <ThemedText style={styles.correctAnswerText}>
                   正确答案: {questions[currentQuestion].answer}
@@ -365,26 +374,38 @@ export default function QuizScreen() {
           </View>
         )}
       </ThemedView>
+      </ScrollView>
     </SafeAreaView>
   );
 }
 
-const { width } = Dimensions.get("window");
+const { width, height } = Dimensions.get("window");
+const isSmallScreen = width < 375; // 小屏幕
+const isTablet = width >= 768; // 平板
 
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
   },
+  scrollView: {
+    flex: 1,
+  },
+  scrollContent: {
+    flexGrow: 1,
+    paddingBottom: isSmallScreen ? 15 : 20,
+  },
   container: {
     flex: 1,
-    padding: 20,
+    paddingHorizontal: isSmallScreen ? 15 : 20,
+    paddingTop: isSmallScreen ? 15 : 20,
+    paddingBottom: isSmallScreen ? 15 : 20,
   },
   header: {
     alignItems: "center",
-    marginBottom: 20,
+    marginBottom: isSmallScreen ? 15 : 20,
   },
   subtitle: {
-    fontSize: 14,
+    fontSize: isSmallScreen ? 12 : 14,
     color: "#666",
     marginTop: 5,
   },
@@ -394,13 +415,14 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     textAlign: "center",
-    marginBottom: 30,
+    fontSize: isSmallScreen ? 18 : 22,
+    marginBottom: isSmallScreen ? 25 : 30,
   },
   quizTypeButton: {
     backgroundColor: "white",
-    borderRadius: 15,
-    padding: 20,
-    marginBottom: 15,
+    borderRadius: isSmallScreen ? 12 : 15,
+    padding: isSmallScreen ? 15 : 20,
+    marginBottom: isSmallScreen ? 12 : 15,
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -411,13 +433,13 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   quizTypeButtonText: {
-    fontSize: 18,
+    fontSize: isSmallScreen ? 16 : 18,
     fontWeight: "600",
     color: "#333",
-    marginBottom: 5,
+    marginBottom: isSmallScreen ? 3 : 5,
   },
   quizTypeDescription: {
-    fontSize: 14,
+    fontSize: isSmallScreen ? 12 : 14,
     color: "#666",
   },
   quizInProgress: {
@@ -426,23 +448,23 @@ const styles = StyleSheet.create({
   progressContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
-    marginBottom: 20,
+    marginBottom: isSmallScreen ? 15 : 20,
   },
   progressText: {
-    fontSize: 16,
+    fontSize: isSmallScreen ? 14 : 16,
     color: "#666",
   },
   scoreText: {
-    fontSize: 16,
+    fontSize: isSmallScreen ? 14 : 16,
     fontWeight: "600",
     color: "#007AFF",
   },
   questionCard: {
     backgroundColor: "white",
-    borderRadius: 20,
-    padding: 30,
+    borderRadius: isSmallScreen ? 15 : 20,
+    padding: isSmallScreen ? 20 : 30,
     alignItems: "center",
-    marginBottom: 30,
+    marginBottom: isSmallScreen ? 20 : 30,
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -453,28 +475,33 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   questionTitle: {
-    fontSize: 18,
+    fontSize: isSmallScreen ? 16 : 18,
     color: "#666",
-    marginBottom: 20,
+    marginBottom: isSmallScreen ? 15 : 20,
   },
   kanaCharacter: {
-    fontSize: 140,
+    fontSize: isSmallScreen ? 100 : 140,
     fontWeight: "bold",
     color: "#333",
     textAlign: "center",
     textAlignVertical: "center",
     includeFontPadding: false,
-    lineHeight: 140,
+    lineHeight: isSmallScreen ? 100 : 140,
   },
   optionsContainer: {
-    gap: 12,
+    gap: isSmallScreen ? 8 : 12,
   },
   optionButton: {
     backgroundColor: "#f8f9fa",
-    borderRadius: 12,
-    padding: 18,
+    borderRadius: isSmallScreen ? 10 : 12,
+    padding: isSmallScreen ? 14 : 18,
     borderWidth: 2,
     borderColor: "transparent",
+  },
+  optionText: {
+    fontSize: isSmallScreen ? 16 : 18,
+    textAlign: "center",
+    color: "#333",
   },
   selectedOption: {
     borderColor: "#007AFF",
@@ -488,11 +515,6 @@ const styles = StyleSheet.create({
     borderColor: "#FF3B30",
     backgroundColor: "#FFEBEE",
   },
-  optionText: {
-    fontSize: 18,
-    textAlign: "center",
-    color: "#333",
-  },
   selectedOptionText: {
     color: "#007AFF",
     fontWeight: "600",
@@ -502,9 +524,9 @@ const styles = StyleSheet.create({
     fontWeight: "600",
   },
   feedbackContainer: {
-    marginTop: 30,
-    padding: 20,
-    borderRadius: 15,
+    marginTop: isSmallScreen ? 20 : 30,
+    padding: isSmallScreen ? 15 : 20,
+    borderRadius: isSmallScreen ? 12 : 15,
     alignItems: "center",
   },
   correctFeedback: {
@@ -518,45 +540,50 @@ const styles = StyleSheet.create({
     borderColor: "#FF3B30",
   },
   feedbackText: {
-    fontSize: 20,
+    fontSize: isSmallScreen ? 18 : 20,
     fontWeight: "600",
     marginBottom: 10,
   },
   correctAnswerText: {
-    fontSize: 18,
+    fontSize: isSmallScreen ? 16 : 18,
     fontWeight: "600",
     color: "#333",
     marginBottom: 5,
   },
   kanaInfoText: {
-    fontSize: 14,
+    fontSize: isSmallScreen ? 12 : 14,
     color: "#666",
     marginBottom: 20,
   },
   nextButton: {
     backgroundColor: "#007AFF",
-    borderRadius: 25,
-    paddingHorizontal: 30,
-    paddingVertical: 12,
+    borderRadius: isSmallScreen ? 20 : 25,
+    paddingHorizontal: isSmallScreen ? 20 : 30,
+    paddingVertical: isSmallScreen ? 10 : 12,
   },
   nextButtonText: {
     color: "white",
-    fontSize: 16,
+    fontSize: isSmallScreen ? 14 : 16,
     fontWeight: "600",
   },
   resultContainer: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+    paddingHorizontal: 20,
+    paddingVertical: 20,
   },
   resultTitle: {
     marginBottom: 30,
+    textAlign: "center",
   },
   scoreCard: {
     backgroundColor: "white",
     borderRadius: 20,
-    padding: 40,
+    paddingVertical: 30,
+    paddingHorizontal: 50,
     alignItems: "center",
+    justifyContent: "center",
     marginBottom: 30,
     shadowColor: "#000",
     shadowOffset: {
@@ -566,16 +593,22 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 8,
     elevation: 5,
+    width: "100%",
   },
   finalScore: {
     fontSize: 48,
     fontWeight: "bold",
     color: "#333",
+    textAlign: "center",
+    includeFontPadding: false,
+    lineHeight: 60,
   },
   scorePercentage: {
     fontSize: 24,
     color: "#007AFF",
     marginTop: 10,
+    textAlign: "center",
+    includeFontPadding: false,
   },
   resultMessage: {
     fontSize: 18,

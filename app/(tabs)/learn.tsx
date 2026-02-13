@@ -378,7 +378,7 @@ export default function LearnScreen() {
                 <ThemedText
                   style={[
                     styles.navButtonText,
-                    currentIndex === 0 && styles.disabledButtonText,
+                    currentIndex === 0 && { color: "#999" },
                   ]}
                 >
                   上一个
@@ -442,6 +442,8 @@ export default function LearnScreen() {
 }
 
 const { width, height } = Dimensions.get("window");
+const isSmallScreen = width < 375; // iPhone SE 等小屏幕
+const isTablet = width >= 768; // 平板
 
 const styles = StyleSheet.create({
   safeArea: {
@@ -449,29 +451,31 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    padding: 20,
+    paddingHorizontal: isSmallScreen ? 15 : 20,
+    paddingTop: isSmallScreen ? 10 : 20,
+    paddingBottom: isSmallScreen ? 10 : 20,
   },
   header: {
     alignItems: "center",
-    marginBottom: 10,
+    marginBottom: isSmallScreen ? 10 : 20,
   },
   modeSelector: {
     flexDirection: "row",
     justifyContent: "center",
-    marginVertical: 15,
-    gap: 10,
+    marginVertical: isSmallScreen ? 10 : 15,
+    gap: isSmallScreen ? 8 : 10,
   },
   modeButton: {
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-    borderRadius: 20,
+    paddingHorizontal: isSmallScreen ? 15 : 20,
+    paddingVertical: isSmallScreen ? 8 : 10,
+    borderRadius: isSmallScreen ? 15 : 20,
     backgroundColor: "#f0f0f0",
   },
   activeModeButton: {
     backgroundColor: "#007AFF",
   },
   modeButtonText: {
-    fontSize: 14,
+    fontSize: isSmallScreen ? 12 : 14,
     fontWeight: "500",
     color: "gray",
   },
@@ -481,15 +485,15 @@ const styles = StyleSheet.create({
   progressContainer: {
     width: "100%",
     alignItems: "center",
-    marginTop: 10,
+    marginTop: isSmallScreen ? 8 : 10,
   },
   progressBar: {
     width: "100%",
-    height: 8,
+    height: isSmallScreen ? 6 : 8,
     backgroundColor: "#e0e0e0",
     borderRadius: 4,
     overflow: "hidden",
-    marginBottom: 5,
+    marginBottom: isSmallScreen ? 3 : 5,
   },
   progressFill: {
     height: "100%",
@@ -497,21 +501,21 @@ const styles = StyleSheet.create({
     borderRadius: 4,
   },
   progressText: {
-    fontSize: 14,
+    fontSize: isSmallScreen ? 12 : 14,
     color: "#666",
   },
   mainContent: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    marginTop: 10,
+    marginTop: isSmallScreen ? 5 : 10,
   },
   kanaCard: {
-    width: width * 0.85,
-    minHeight: width * 0.85,
-    maxHeight: height * 0.6,
+    width: isTablet ? "60%" : isSmallScreen ? "95%" : "85%",
+    maxWidth: 400,
+    aspectRatio: 1,
     backgroundColor: "white",
-    borderRadius: 20,
+    borderRadius: isSmallScreen ? 15 : 20,
     justifyContent: "center",
     alignItems: "center",
     shadowColor: "#000",
@@ -522,17 +526,17 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,
-    marginBottom: 30,
-    padding: 20,
+    marginBottom: isSmallScreen ? 20 : 30,
+    padding: isSmallScreen ? 15 : 20,
   },
   kanaCharacter: {
-    fontSize: 100,
+    fontSize: isSmallScreen ? 80 : 100,
     fontWeight: "bold",
     color: "#333",
     textAlign: "center",
     textAlignVertical: "center",
     includeFontPadding: false,
-    lineHeight: 100,
+    lineHeight: isSmallScreen ? 80 : 100,
   },
   kanaCharacterContainer: {
     width: "100%",
@@ -570,56 +574,53 @@ const styles = StyleSheet.create({
   answerContainer: {
     width: "100%",
     alignItems: "center",
-    marginTop: 30,
-    paddingHorizontal: 10,
+    marginTop: isSmallScreen ? 20 : 30,
+    paddingHorizontal: isSmallScreen ? 8 : 10,
   },
   answerLabel: {
-    fontSize: 16,
+    fontSize: isSmallScreen ? 14 : 16,
     color: "#666",
-    marginBottom: 5,
+    marginBottom: isSmallScreen ? 4 : 5,
   },
   answerText: {
-    fontSize: 28,
+    fontSize: isSmallScreen ? 24 : 28,
     fontWeight: "bold",
     color: "#007AFF",
     textAlign: "center",
     flexWrap: "wrap",
     flexShrink: 1,
-    lineHeight: 32,
+    lineHeight: isSmallScreen ? 26 : 32,
   },
   controlButtons: {
     flexDirection: "row",
     justifyContent: "space-between",
     width: "100%",
-    marginBottom: 20,
-    gap: 15,
+    marginBottom: isSmallScreen ? 15 : 20,
+    gap: isSmallScreen ? 10 : 15,
   },
   navButton: {
-    paddingHorizontal: 25,
-    paddingVertical: 12,
+    paddingHorizontal: isSmallScreen ? 20 : 25,
+    paddingVertical: isSmallScreen ? 10 : 12,
     backgroundColor: "#f0f0f0",
     borderRadius: 25,
-    minWidth: 110,
+    minWidth: isSmallScreen ? 90 : 110,
     alignItems: "center",
   },
   navButtonText: {
-    fontSize: 16,
+    fontSize: isSmallScreen ? 14 : 16,
     fontWeight: "600",
     color: "#333",
   },
-  disabledButtonText: {
-    color: "#999",
-  },
   showAnswerButton: {
-    paddingHorizontal: 35,
-    paddingVertical: 12,
+    paddingHorizontal: isSmallScreen ? 25 : 35,
+    paddingVertical: isSmallScreen ? 10 : 12,
     backgroundColor: "#007AFF",
     borderRadius: 25,
-    minWidth: 130,
+    minWidth: isSmallScreen ? 110 : 130,
     alignItems: "center",
   },
   showAnswerButtonText: {
-    fontSize: 16,
+    fontSize: isSmallScreen ? 14 : 16,
     fontWeight: "600",
     color: "white",
   },

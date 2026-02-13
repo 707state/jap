@@ -1,19 +1,20 @@
-import React, { useState, useEffect } from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  ScrollView,
-  SafeAreaView,
-  TouchableOpacity,
-  SectionList,
-  Dimensions,
-} from "react-native";
-import { ThemedView } from "@/components/themed-view";
-import { ThemedText } from "@/components/themed-text";
-import { useColorScheme } from "@/hooks/use-color-scheme";
-import { Colors } from "@/constants/theme";
 import { SettingsLayout } from "@/components/settings-layout";
+import { ThemedText } from "@/components/themed-text";
+import { ThemedView } from "@/components/themed-view";
+import { useColorScheme } from "@/hooks/use-color-scheme";
+import { Ionicons } from "@expo/vector-icons";
+import React, { useEffect, useState } from "react";
+import {
+  Dimensions,
+  Modal,
+  SafeAreaView,
+  SectionList,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+  View,
+} from "react-native";
 
 // 定义假名数据类型
 interface KanaData {
@@ -39,6 +40,7 @@ export default function KanaListScreen() {
   const [showMode, setShowMode] = useState<"hiragana" | "katakana" | "both">(
     "both",
   );
+  const [showDetailModal, setShowDetailModal] = useState(false);
 
   // 加载数据
   useEffect(() => {
@@ -96,7 +98,6 @@ export default function KanaListScreen() {
 
   // 渲染假名卡片
   const renderKanaCard = (item: KanaData) => {
-    const isSelected = selectedKana?.id === item.id;
     const isBothMode = showMode === "both";
 
     return (
@@ -105,9 +106,11 @@ export default function KanaListScreen() {
         style={[
           styles.kanaCard,
           isBothMode && styles.kanaCardBoth,
-          isSelected && styles.selectedKanaCard,
         ]}
-        onPress={() => setSelectedKana(isSelected ? null : item)}
+        onPress={() => {
+          setSelectedKana(item);
+          setShowDetailModal(true);
+        }}
       >
         <View style={styles.kanaContent}>
           {/* 根据显示模式显示假名 */}
@@ -142,16 +145,68 @@ export default function KanaListScreen() {
             {item.answer}
           </Text>
         </View>
-
-        {isSelected && (
-          <View style={styles.detailInfo}>
-            <Text style={styles.detailText}>ID: {item.id}</Text>
-            <Text style={styles.detailText}>罗马音: {item.answer}</Text>
-            <Text style={styles.detailText}>平假名: {item.kana.hiragana}</Text>
-            <Text style={styles.detailText}>片假名: {item.kana.katakana}</Text>
-          </View>
-        )}
       </TouchableOpacity>
+    );
+  };
+
+  // 关闭详情模态框
+  const closeDetailModal = () => {
+    setShowDetailModal(false);
+    setSelectedKana(null);
+  };
+
+  // 渲染详情模态框
+  const renderDetailModal = () => {
+    if (!selectedKana) return null;
+
+    return (
+      <Modal
+        visible={showDetailModal}
+        transparent={true}
+        animationType="fade"
+        onRequestClose={closeDetailModal}
+      >
+        <TouchableWithoutFeedback onPress={closeDetailModal}>
+          <View style={styles.modalOverlay}>
+            <TouchableWithoutFeedback onPress={() => {}}>
+              <View style={styles.modalContent}>
+                {/* 关闭按钮 */}
+                <TouchableOpacity
+                  style={styles.closeButton}
+                  onPress={closeDetailModal}
+                >
+                  <Ionicons name="close" size={24} color="#666" />
+                </TouchableOpacity>
+
+                <Text style={styles.modalTitle}>假名详情</Text>
+
+                <View style={styles.detailGrid}>
+                  <View style={styles.detailItem}>
+                    <Text style={styles.detailLabel}>平假名</Text>
+                    <Text style={styles.detailValue}>
+                      {selectedKana.kana.hiragana}
+                    </Text>
+                  </View>
+                  <View style={styles.detailItem}>
+                    <Text style={styles.detailLabel}>片假名</Text>
+                    <Text style={styles.detailValue}>
+                      {selectedKana.kana.katakana}
+                    </Text>
+                  </View>
+                  <View style={styles.detailItem}>
+                    <Text style={styles.detailLabel}>罗马音</Text>
+                    <Text style={styles.detailValue}>{selectedKana.answer}</Text>
+                  </View>
+                  <View style={styles.detailItem}>
+                    <Text style={styles.detailLabel}>ID</Text>
+                    <Text style={styles.detailValue}>{selectedKana.id}</Text>
+                  </View>
+                </View>
+              </View>
+            </TouchableWithoutFeedback>
+          </View>
+        </TouchableWithoutFeedback>
+      </Modal>
     );
   };
 
@@ -249,34 +304,8 @@ export default function KanaListScreen() {
             showsVerticalScrollIndicator={false}
           />
 
-          {/* 选中的假名详情 */}
-          {selectedKana && (
-            <View style={styles.selectedDetail}>
-              <ThemedText type="subtitle">详细信息</ThemedText>
-              <View style={styles.detailGrid}>
-                <View style={styles.detailItem}>
-                  <Text style={styles.detailLabel}>平假名</Text>
-                  <Text style={styles.detailValue}>
-                    {selectedKana.kana.hiragana}
-                  </Text>
-                </View>
-                <View style={styles.detailItem}>
-                  <Text style={styles.detailLabel}>片假名</Text>
-                  <Text style={styles.detailValue}>
-                    {selectedKana.kana.katakana}
-                  </Text>
-                </View>
-                <View style={styles.detailItem}>
-                  <Text style={styles.detailLabel}>罗马音</Text>
-                  <Text style={styles.detailValue}>{selectedKana.answer}</Text>
-                </View>
-                <View style={styles.detailItem}>
-                  <Text style={styles.detailLabel}>ID</Text>
-                  <Text style={styles.detailValue}>{selectedKana.id}</Text>
-                </View>
-              </View>
-            </View>
-          )}
+          {/* 详情模态框 */}
+          {renderDetailModal()}
         </ThemedView>
       </SafeAreaView>
     </SettingsLayout>
@@ -363,11 +392,6 @@ const styles = StyleSheet.create({
   kanaCardBoth: {
     height: cardSize * 1.5, // 同时显示平假名和片假名时需要更高
   },
-  selectedKanaCard: {
-    backgroundColor: "#E3F2FD",
-    borderWidth: 2,
-    borderColor: "#007AFF",
-  },
   kanaContent: {
     alignItems: "center",
     justifyContent: "center",
@@ -402,45 +426,57 @@ const styles = StyleSheet.create({
     fontSize: cardSize * 0.2,
     marginTop: 2,
   },
-  detailInfo: {
-    position: "absolute",
-    bottom: -80,
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  modalContent: {
     backgroundColor: "white",
-    padding: 12,
-    borderRadius: 8,
+    borderRadius: 20,
+    padding: 25,
+    width: width * 0.85,
+    maxWidth: 400,
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
-      height: 3,
+      height: 4,
     },
-    shadowOpacity: 0.3,
-    shadowRadius: 4.84,
-    elevation: 6,
-    minWidth: 140,
-    zIndex: 10,
+    shadowOpacity: 0.25,
+    shadowRadius: 8,
+    elevation: 5,
   },
-  detailText: {
-    fontSize: 13,
+  closeButton: {
+    position: "absolute",
+    top: 15,
+    right: 15,
+    width: 30,
+    height: 30,
+    borderRadius: 15,
+    backgroundColor: "#F5F5F5",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  modalTitle: {
+    fontSize: 20,
+    fontWeight: "bold",
     color: "#333",
-    marginBottom: 2,
-  },
-  selectedDetail: {
-    backgroundColor: "#F8F9FA",
-    borderRadius: 12,
-    padding: 15,
-    marginTop: 20,
-    borderWidth: 1,
-    borderColor: "#E9ECEF",
+    textAlign: "center",
+    marginBottom: 20,
+    marginTop: 10,
   },
   detailGrid: {
     flexDirection: "row",
     flexWrap: "wrap",
     justifyContent: "space-between",
-    marginTop: 10,
   },
   detailItem: {
     width: "48%",
-    marginBottom: 10,
+    marginBottom: 15,
+    backgroundColor: "#F8F9FA",
+    borderRadius: 10,
+    padding: 12,
   },
   detailLabel: {
     fontSize: 12,
@@ -448,8 +484,8 @@ const styles = StyleSheet.create({
     marginBottom: 4,
   },
   detailValue: {
-    fontSize: 16,
-    fontWeight: "600",
+    fontSize: 18,
+    fontWeight: "bold",
     color: "#333",
   },
 });
